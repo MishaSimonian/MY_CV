@@ -1,0 +1,259 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misha Simonian - CV</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: #fff;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.2em;
+            font-weight: 600;
+        }
+        .header p {
+            margin: 5px 0;
+            font-size: 1em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section h2 {
+            font-size: 1.5em;
+            color: #1e3a8a;
+            border-bottom: 2px solid #3b82f6;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        .section p, .section ul {
+            font-size: 1em;
+            line-height: 1.6;
+        }
+        .section ul {
+            padding-left: 20px;
+        }
+        .section ul li {
+            margin-bottom: 10px;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .skills-grid li {
+            background: #e6f3ff;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .experience, .education, .projects {
+            margin-bottom: 20px;
+        }
+        .experience h3, .education h3, .projects h3 {
+            font-size: 1.2em;
+            color: #333;
+            margin: 10px 0 5px;
+        }
+        .experience p, .education p, .projects p {
+            margin: 5px 0;
+            font-size: 0.95em;
+            color: #666;
+        }
+        .projects ul {
+            margin-top: 10px;
+        }
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px;
+            }
+            .header {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .content {
+                padding: 20px;
+            }
+            .section h2 {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Misha Simonian</h1>
+            <p>+421950321947 | simonyanmishakareni@outlook.com | Banská Bystrica, Slovak Republic</p>
+            <p><a href="https://github.com/MishaSimonian" style="color: #fff; text-decoration: none;">github.com/MishaSimonian</a></p>
+        </div>
+        <div class="content">
+            <div class="section">
+                <h2>Summary</h2>
+                <p>Junior Java Developer with a strong foundation in Core Java, including OOP, collections, streams, and multithreading. Actively developing skills in Spring Boot and JDBC through projects like a Patient Management System. Experienced in building responsive web applications with HTML, CSS, and JavaScript, with a focus on transitioning to backend development. Committed to continuous learning and contributing to robust backend systems.</p>
+            </div>
+            <div class="section">
+                <h2>Technical Skills</h2>
+                <ul class="skills-grid">
+                    <li>Java (OOP, Collections, Streams, Multithreading): Intermediate</li>
+                    <li>Spring Boot: Developing</li>
+                    <li>JDBC: Currently Studying</li>
+                    <li>REST APIs: Developing</li>
+                    <li>Hibernate: Familiar</li>
+                    <li>JUnit 5: Developing</li>
+                    <li>Maven: Developing</li>
+                    <li>Git: Intermediate</li>
+                    <li>IntelliJ IDEA: Intermediate</li>
+                    <li>GitHub: Intermediate</li>
+                    <li>HTML5: Advanced</li>
+                    <li>CSS: Advanced</li>
+                    <li>JavaScript: Familiar</li>
+                    <li>Figma: Intermediate</li>
+                </ul>
+            </div>
+            <div class="section">
+                <h2>Key Projects</h2>
+                <div class="projects">
+                    <h3>Patient Management System</h3>
+                    <p>2024 | <a href="https://github.com/MishaSimonian/Patient-Management-System">github.com/MishaSimonian/Patient-Management-System</a></p>
+                    <ul>
+                        <li>Developed a Java-based application to manage patient records, implementing CRUD operations for 100+ mock entries using OOP and collections.</li>
+                        <li>Applied exception handling and data validation to improve reliability, reducing errors by 20% during testing.</li>
+                        <li>Currently integrating Spring Boot and JDBC to enable REST API and database connectivity.</li>
+                    </ul>
+                </div>
+                <div class="projects">
+                    <h3>Multithreaded Task Processor</h3>
+                    <p>2024</p>
+                    <ul>
+                        <li>Built a Java application using the Runnable interface to process tasks concurrently, improving throughput by 15%.</li>
+                        <li>Implemented synchronization to ensure thread safety for shared resources.</li>
+                    </ul>
+                </div>
+                <div class="projects">
+                    <h3>Algorithm Optimization Suite</h3>
+                    <p>2023–2024</p>
+                    <ul>
+                        <li>Developed and tested sorting, searching, and recursive algorithms in Java, optimizing performance by 25% for large datasets.</li>
+                        <li>Utilized Java Streams and Collections for efficient data processing.</li>
+                    </ul>
+                </div>
+                <div class="projects">
+                    <h3>Flower Shop Online Store (New Year’s Marathon Winner)</h3>
+                    <p>2023</p>
+                    <ul>
+                        <li>Designed a responsive e-commerce site with JavaScript, HTML, and CSS, earning best user experience among 50+ participants.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="section">
+                <h2>Work Experience</h2>
+                <div class="experience">
+                    <h3>Freelance Web Developer</h3>
+                    <p>Self-Employed | Banská Bystrica, Slovak Republic | July 2020–Present</p>
+                    <ul>
+                        <li>Developed 5+ responsive websites using HTML, CSS, JavaScript, and WordPress, meeting 100% of client deadlines.</li>
+                        <li>Integrated third-party APIs for payment and booking systems, improving user engagement by 20%.</li>
+                        <li>Collaborated with clients to define project requirements, ensuring high satisfaction and repeat business.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="section">
+                <h2>Education</h2>
+                <div class="education">
+                    <h3>Java-Profession</h3>
+                    <p>Productstar | October 2023–Present</p>
+                    <p>Mastered Core Java (OOP, collections, streams, lambda expressions, multithreading, Java I/O) and currently studying JDBC, Spring Boot, REST APIs, and design patterns. Built projects including a patient management system and multithreaded applications.</p>
+                </div>
+                <div class="education">
+                    <h3>Additional Training</h3>
+                    <p>
+                        Front-End Developer, HTML-Academy (2021–2022)<br>
+                        Web Development for Beginners: HTML and CSS, Stepik (2021)<br>
+                        PHP Developer, php.zone (2022–2023)
+                    </p>
+                </div>
+            </div>
+            <div class="section">
+                <h2>Languages</h2>
+                <ul>
+                    <li>Slovak: Mid-Intermediate (B2)</li>
+                    <li>English: Pre-Intermediate (B1)</li>
+                    <li>Russian: Expert (C2)</li>
+                </ul>
+            </div>
+            <div class="section">
+                <h2>Licenses/Certifications</h2>
+                <ul>
+                    <li>Driver’s License: B</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
