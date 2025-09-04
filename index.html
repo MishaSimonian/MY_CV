@@ -1,43 +1,3 @@
-<script type="text/javascript">
-  var gk_isXlsx = false;
-  var gk_xlsxFileLookup = {};
-  var gk_fileData = {};
-  function filledCell(cell) {
-    return cell !== '' && cell != null;
-  }
-  function loadFileData(filename) {
-    if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-      try {
-        var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-        var firstSheetName = workbook.SheetNames[0];
-        var worksheet = workbook.Sheets[firstSheetName];
-
-        // Convert sheet to JSON to filter blank rows
-        var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-        // Filter out blank rows (rows where all cells are empty, null, or undefined)
-        var filteredData = jsonData.filter(row => row.some(filledCell));
-
-        // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-        var headerRowIndex = filteredData.findIndex((row, index) =>
-          row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-        );
-        // Fallback
-        if (headerRowIndex === -1 || headerRowIndex > 25) {
-          headerRowIndex = 0;
-        }
-
-        // Convert filtered JSON back to CSV
-        var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-        csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-        return csv;
-      } catch (e) {
-        console.error(e);
-        return "";
-      }
-    }
-    return gk_fileData[filename] || "";
-  }
-</script>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -81,6 +41,11 @@
       margin: 5px 0;
       font-size: 1em;
       opacity: 0.9;
+    }
+
+    .header a {
+      color: #fff;
+      text-decoration: none;
     }
 
     .content {
@@ -181,17 +146,12 @@
     <div class="header">
       <h1>Misha Simonian</h1>
       <p>+421950321947 | simonyanmishakareni@outlook.com | Banská Bystrica, Slovak Republic</p>
-      <p><a href="https://github.com/MishaSimonian"
-          style="color: #fff; text-decoration: none;">github.com/MishaSimonian</a></p>
+      <p><a href="https://github.com/MishaSimonian">github.com/MishaSimonian</a></p>
     </div>
     <div class="content">
       <div class="section">
         <h2>Summary</h2>
-        <p>Junior Java Developer with a strong foundation in Core Java, including OOP, collections, streams, and
-          multithreading. Actively developing skills in Spring Boot and JDBC through projects like a Patient Management
-          System. Experienced in building responsive web applications with HTML, CSS, and JavaScript, with a focus on
-          transitioning to backend development. Committed to continuous learning and contributing to robust backend
-          systems.</p>
+        <p>Junior Java Developer with hands-on experience in building REST APIs, backend systems, and database-driven applications using Java, Spring Boot, and PostgreSQL. Delivered real-world freelance projects for clients, integrating APIs and meeting deadlines. Highly motivated and fast-learning, currently completing a professional Java program at ProductStar. Passionate about backend and fullstack development with a focus on writing clean, scalable, and production-ready code.</p>
       </div>
       <div class="section">
         <h2>Technical Skills</h2>
@@ -203,57 +163,48 @@
           <li>Hibernate</li>
           <li>JUnit 5</li>
           <li>Maven</li>
-          <li>JavaScript</li>
-          <li>Git</li>
-          <li>SQL</li>
-          <li>PostgreSQL</li>
-          <li>pgAdmin</li>
+          <li>SQL / PostgreSQL</li>
+          <li>JavaScript (ES6+)</li>
+          <li>Git / GitHub</li>
           <li>IntelliJ IDEA</li>
-          <li>GitHub</li>
-          <li>HTML5</li>
-          <li>CSS</li>
+          <li>HTML5 / CSS</li>
           <li>Figma</li>
+          <li>WordPress</li>
         </ul>
       </div>
       <div class="section">
         <h2>Key Projects</h2>
         <div class="projects">
           <h3>Patient Management System</h3>
-          <p>2024 | <a
-              href="https://github.com/MishaSimonian/Patient-Management-System">github.com/MishaSimonian/Patient-Management-System</a>
-          </p>
+          <p>2024 | <a href="https://github.com/MishaSimonian/Patient-Management-System">View on GitHub</a></p>
           <ul>
-            <li>Developed a Java-based application to manage patient records, implementing CRUD operations for 100+ mock
-              entries using OOP and collections.</li>
-            <li>Applied exception handling and data validation to improve reliability, reducing errors by 20% during
-              testing.</li>
-            <li>Currently integrating Spring Boot and JDBC to enable REST API and database connectivity.</li>
+            <li>Developed a Spring Boot REST API with JDBC and PostgreSQL for managing patient records (100+ entries).</li>
+            <li>Implemented CRUD operations, exception handling, and validation to improve reliability and reduce errors.</li>
+            <li>Integrated database connectivity and modularized code for scalability.</li>
           </ul>
         </div>
         <div class="projects">
           <h3>Multithreaded Task Processor</h3>
           <p>2024</p>
           <ul>
-            <li>Built a Java application using the Runnable interface to process tasks concurrently, improving
-              throughput by 15%.</li>
-            <li>Implemented synchronization to ensure thread safety for shared resources.</li>
+            <li>Built a Java application to process tasks concurrently using the Runnable interface and synchronization.</li>
+            <li>Improved throughput by 15% while ensuring thread safety of shared resources.</li>
           </ul>
         </div>
         <div class="projects">
           <h3>Algorithm Optimization Suite</h3>
           <p>2023–2024</p>
           <ul>
-            <li>Developed and tested sorting, searching, and recursive algorithms in Java, optimizing performance by 25%
-              for large datasets.</li>
-            <li>Utilized Java Streams and Collections for efficient data processing.</li>
+            <li>Designed and optimized sorting, searching, and recursive algorithms in Java for large datasets.</li>
+            <li>Improved performance by 25% through efficient use of Java Streams and Collections.</li>
           </ul>
         </div>
         <div class="projects">
           <h3>Flower Shop Online Store (New Year’s Marathon Winner)</h3>
           <p>2023</p>
           <ul>
-            <li>Designed a responsive e-commerce site with JavaScript, HTML, and CSS, earning best user experience among
-              50+ participants.</li>
+            <li>Developed a responsive e-commerce website with JavaScript, HTML, and CSS.</li>
+            <li>Recognized as "Best User Experience" among 50+ participants.</li>
           </ul>
         </div>
       </div>
@@ -261,24 +212,20 @@
         <h2>Work Experience</h2>
         <div class="experience">
           <h3>Freelance Web Developer</h3>
-          <p>Self-Employed | Banská Bystrica, Slovak Republic | July 2020–Present</p>
+          <p>Self-Employed | Banská Bystrica, Slovak Republic | July 2020 – Present</p>
           <ul>
-            <li>Developed 5+ responsive websites using HTML, CSS, JavaScript, and WordPress, meeting 100% of client
-              deadlines.</li>
-            <li>Integrated third-party APIs for payment and booking systems, improving user engagement by 20%.</li>
-            <li>Collaborated with clients to define project requirements, ensuring high satisfaction and repeat
-              business.</li>
+            <li>Delivered 5+ responsive websites using HTML, CSS, JavaScript, and WordPress.</li>
+            <li>Integrated third-party APIs for payments and bookings, increasing user engagement by 20%.</li>
+            <li>Collaborated with clients to gather requirements, ensured timely delivery, and achieved repeat business.</li>
           </ul>
         </div>
       </div>
       <div class="section">
         <h2>Education</h2>
         <div class="education">
-          <h3>Java-Profession</h3>
-          <p>Productstar | October 2023–Present</p>
-          <p>Mastered Core Java (OOP, collections, streams, lambda expressions, multithreading, Java I/O) and currently
-            studying JDBC, Spring Boot, REST APIs, and design patterns. Built projects including a patient management
-            system and multithreaded applications.</p>
+          <h3>Java-Profession (Professional Program)</h3>
+          <p>ProductStar | October 2023 – Present</p>
+          <p>Completed Core Java (OOP, collections, streams, multithreading, Java I/O). Currently studying JDBC, Spring Boot, REST APIs, and design patterns. Built production-level projects including a patient management system and multithreaded applications.</p>
         </div>
         <div class="education">
           <h3>Additional Training</h3>
@@ -298,15 +245,19 @@
         </div>
       </div>
       <div class="section">
+        <h2>Career Change</h2>
+        <p>After completing my medical degree in Dentistry, I made a deliberate career change to IT, driven by my passion for problem-solving, technology, and software development. I transferred the discipline and analytical mindset gained from medicine into programming, where I now focus on backend development with Java and Spring Boot. This transition highlights my adaptability, persistence, and strong motivation to succeed in a new professional field.</p>
+      </div>
+      <div class="section">
         <h2>Languages</h2>
         <ul>
-          <li>Slovak: Mid-Intermediate (B2)</li>
-          <li>English: Pre-Intermediate (B1)</li>
-          <li>Russian: Expert (C2)</li>
+          <li>Slovak: Intermediate (B2)</li>
+          <li>English: Intermediate (B1, improving)</li>
+          <li>Russian: Native / Fluent (C2)</li>
         </ul>
       </div>
       <div class="section">
-        <h2>Licenses/Certifications</h2>
+        <h2>Licenses & Certifications</h2>
         <ul>
           <li>Driver’s License: B</li>
         </ul>
